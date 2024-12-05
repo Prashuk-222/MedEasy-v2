@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "medeasy-backend"
+version = "0.1.0"
+description = "AI assistant to optimize medical healthcare facilities"
+authors = ["AdityaKulshrestha <kulshresthaaditya02@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
