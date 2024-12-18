@@ -23,6 +23,7 @@ The Basic functionality have added till yet:
 
 # Schema of files:
 
+```markdown
 📁 frontend  
 └── 📂 src  
     ├── 📂 assets  
@@ -33,3 +34,4 @@ The Basic functionality have added till yet:
     │   ├── 📄 HomePage.tsx  
     ├── 📂 components  
     └── 📂 providers  
+```
