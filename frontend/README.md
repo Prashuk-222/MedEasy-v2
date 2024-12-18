@@ -23,13 +23,13 @@ The Basic functionality have added till yet:
 
 # Schema of files:
 
-📁 frontend
-└── 📂 src
-    ├── 📂 assets
-    ├── 📂 app
-    |   ├── 📂 (auth)
-    |   ├── 📂 (tabs)
-    |   ├── 📂 (utils)
-    |   ├── 📄 HomePage.tsx
-    ├── 📂 componets
-    └── 📂 providers
+📁 frontend  
+└── 📂 src  
+    ├── 📂 assets  
+    ├── 📂 app  
+    │   ├── 📂 (auth)  
+    │   ├── 📂 (tabs)  
+    │   ├── 📂 (utils)  
+    │   ├── 📄 HomePage.tsx  
+    ├── 📂 components  
+    └── 📂 providers  
