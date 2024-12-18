@@ -30,46 +30,13 @@ API_SCHEMA = {
             "description": "Register a new user by providing the required details.",
             "payload_example": {
                 "email": "newuser@example.com",
-                "first_name": "John",
+                "user_name": "John",
                 "password": "securepassword123"
             },
             "response_example": {
                 "id": "<User ID>",
                 "email": "newuser@example.com",
-                "first_name": "John",
-                "is_active": False
-            },
-        },
-        {
-            "path": "api/activate/<uidb64>/<token>/",
-            "methods": ["POST"],
-            "description": "Activate the user account using the UID and token provided in the activation email.",
-            "payload_example": None,
-            "response_example": {
-                "account": "Account has been activated!"
-            },
-        },
-        {
-            "path": "api/reset/password/",
-            "methods": ["POST"],
-            "description": "Request a password reset email for the user by providing their registered email.",
-            "payload_example": {
-                "email": "user@example.com"
-            },
-            "response_example": {
-                "detail": "Password reset email sent."
-            },
-        },
-        {
-            "path": "api/set/password/<uidb64>/<token>/",
-            "methods": ["POST"],
-            "description": "Reset the user password by providing a new password along with UID and token.",
-            "payload_example": {
-                "password1": "newpassword123",
-                "password2": "newpassword123"
-            },
-            "response_example": {
-                "detail": "Password has been reset successfully."
+                "user_name": "John",
             },
         },
     ]
