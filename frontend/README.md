@@ -2,12 +2,12 @@
 
 To run this code on you local machine just follow these commands one by one
 
-`
+```
 git clone https://github.com/AdityaKulshrestha/MedEasy-v2
 cd frontend
 npm install
 npm start -c
-`
+```
 
 
 In the project directory, you can run:
