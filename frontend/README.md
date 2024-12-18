@@ -19,15 +19,16 @@ This folder contain the frontend part of the project and act as client side rend
 The Basic functionality have added till yet:
  - Initialized Project Fontend
  - Created basic schema that look like
-``📁 frontend
-   └── 📂 src
-        ├── 📂 assets
-        ├── 📂 app
-        |   ├── 📂 (auth)
-        |   ├── 📂 (tabs)
-        |   ├── 📂 (utils)
-        |   ├── 📄 HomePage.tsx
-        ├── 📂 componets
-        └── 📂 providers
-``
+`
+📁 frontend
+└── 📂 src
+    ├── 📂 assets
+    ├── 📂 app
+    |   ├── 📂 (auth)
+    |   ├── 📂 (tabs)
+    |   ├── 📂 (utils)
+    |   ├── 📄 HomePage.tsx
+    ├── 📂 componets
+    └── 📂 providers
+`
 - Created HomePage.tsx for init.
