@@ -7,6 +7,7 @@
   justify-content: center;
   padding: 1rem;
   box-sizing: border-box;
+  background: linear-gradient(to right, #EBEFF2, #E9EDF2, #E2E6E9, #DCE0E5, #DCE1E3);
 }
 
 .icon {
@@ -31,6 +32,8 @@
   height: 100%;
   object-fit: cover;
   border-radius: 0.5rem;
+  mix-blend-mode:multiply;
+  filter: brightness(1.02);
 }
 
 .signin-card {
