@@ -1,0 +1,75 @@
+/* Base container styles */
+.container {
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.icon {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  z-index: 10;
+}
+
+.inner-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 75%;
+  height: 75%;
+  gap: 1rem;
+}
+
+.image {
+  flex: 1;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.signin-card {
+  flex: 1;
+  padding-right: 5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .icon {
+    position: relative;
+    left: -11.5rem;
+    top: 4rem;
+  }
+
+  .inner-container {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+    gap: 0rem;
+  }
+
+  .image {
+    display: none;
+  }
+
+  .signin-card {
+    height: auto;
+    padding: 0rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .icon {
+    left: -9rem;
+    top: 4rem;
+  }
+}
