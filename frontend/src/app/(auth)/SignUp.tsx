@@ -5,11 +5,16 @@ import "./SignIn.css";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const SignUp = () => {
-  console.log("sing Up page");
+  const goBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="container">
       <div className="inner-container">
-        <ArrowBackIosIcon className="back-icon icon" />
+        <div className="back-icon-container" onClick={goBack}>
+          <ArrowBackIosIcon className="back-icon icon" />
+        </div>
         <img src={img} alt="Login" className="image" />
         <div className="signin-card">
           <SignUpCard />
@@ -18,6 +23,5 @@ const SignUp = () => {
     </div>
   );
 };
-
 
 export default SignUp;
