@@ -2,11 +2,9 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MuiCard from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
@@ -34,16 +32,12 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-export default function SignInCard() {
+export default function SignUpCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -102,7 +96,7 @@ export default function SignInCard() {
         variant="h4"
         sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
       >
-        Sign in
+        Sign up
       </Typography>
       <Box
         component="form"
@@ -130,15 +124,6 @@ export default function SignInCard() {
         <FormControl>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <FormLabel htmlFor="password">Password</FormLabel>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: "baseline" }}
-            >
-              Forgot your password?
-            </Link>
           </Box>
           <TextField
             error={passwordError}
@@ -155,10 +140,25 @@ export default function SignInCard() {
             color={passwordError ? "error" : "primary"}
           />
         </FormControl>
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
+        <FormControl>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <FormLabel htmlFor="password"> Confirm Password</FormLabel>
+          </Box>
+          <TextField
+            error={passwordError}
+            helperText={passwordErrorMessage}
+            name="password"
+            placeholder="••••••"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            autoFocus
+            required
+            fullWidth
+            variant="outlined"
+            color={passwordError ? "error" : "primary"}
+          />
+        </FormControl>
         <ForgotPassword open={open} handleClose={handleClose} />
         <Button
           type="submit"
@@ -166,13 +166,13 @@ export default function SignInCard() {
           variant="contained"
           onClick={validateInputs}
         >
-          Sign in
+          Sign up
         </Button>
         <Typography sx={{ textAlign: "center" }}>
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <span>
-            <Link variant="body2" sx={{ alignSelf: "center" }} href="/signup">
-              Sign up
+            <Link variant="body2" sx={{ alignSelf: "center" }} href="/signin">
+              Sign In
             </Link>
           </span>
         </Typography>
@@ -185,7 +185,7 @@ export default function SignInCard() {
           onClick={() => alert("Sign in with Google")}
           startIcon={<GoogleIcon />}
         >
-          Sign in with Google
+          Sign up with Google
         </Button>
         <Button
           fullWidth
@@ -193,7 +193,7 @@ export default function SignInCard() {
           onClick={() => alert("Sign in with Facebook")}
           startIcon={<FacebookIcon />}
         >
-          Sign in with Facebook
+          Sign up with Facebook
         </Button>
       </Box>
     </Card>

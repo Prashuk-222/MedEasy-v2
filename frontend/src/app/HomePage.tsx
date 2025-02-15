@@ -18,7 +18,7 @@ export default function HomePage() {
         <a href="/" className="text-xl font-bold">
           Home
         </a>
-        <a href="/" className="text-xl font-bold ">
+        <a href="/SignIn" className="text-xl font-bold ">
           Login
         </a>
         <a href="/" className="text-xl font-bold">
