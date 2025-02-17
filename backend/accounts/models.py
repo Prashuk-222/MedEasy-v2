@@ -19,6 +19,20 @@ class MyAccountManager(BaseUserManager):
         user.set_password(password)  # Hash the password
         user.save(using=self._db)
         return user
+    
+    def create_superuser(self, email, user_name, password):
+        if password is None:
+            raise TypeError('Superuser must have a password.')
+        user = self.create_user(
+            email=self.normalize_email(email),
+            user_name=user_name,
+            password=password,
+        )
+        user.is_admin = True
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
 
 class ProfileUser(AbstractBaseUser, PermissionsMixin):
     user_name = models.CharField(_('User Name'), max_length=150)
@@ -28,6 +42,12 @@ class ProfileUser(AbstractBaseUser, PermissionsMixin):
         unique=True,
         validators=[validate_email],
     )
+    is_staff = models.BooleanField(
+        _('staff status'),
+        default=False,
+        help_text=_('Designates whether the user can log into this admin site.'),
+    )
+
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
     objects = MyAccountManager()
