@@ -78,6 +78,8 @@ export const AuthProvider = ({children}) => {
                 position: "top-right",
                 autoClose: 3000,
               });
+            
+              navigate('/')
         } else {
             toast.error(data['detail'], {
                 position: "top-center",
