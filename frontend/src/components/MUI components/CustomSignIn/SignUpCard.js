@@ -112,6 +112,7 @@ export default function SignUpCard() {
   if(authTokens){
     return(
       <Card variant="outlined">
+        <ToastContainer />
         <p>You're already logged in, please logout first</p>
         <Button onClick={logoutUser}>Logout</Button>
       </Card>
@@ -119,6 +120,7 @@ export default function SignUpCard() {
   }
   return (
     <Card variant="outlined">
+      <ToastContainer />
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
         <img
           src={logo}
