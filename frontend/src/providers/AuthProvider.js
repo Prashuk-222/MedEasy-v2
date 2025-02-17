@@ -1,20 +1,28 @@
-import {createContext, useState, useEffect} from "react";
-import jwt_decode from "jwt-decode";
+import {createContext, useState} from "react";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router";
 import {toast} from 'react-toastify';
 
 const AuthContext = createContext()
 export default AuthContext;
 
+// Issues to be fixed: 
+// Loading state is not working properly, it's always true
+// Endpoint for Refresh API token is not working
+// Reset password API is not designed yet
+// Token schema issue - 1 
+
+
+
 export const AuthProvider = ({children}) => {
 
     let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
-    let [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens').access) : null)
-    let [loading, setLoading] = useState(true)
+    let [user, setUser] = useState (() => authTokens ? jwtDecode(authTokens.access) : null)
+    // let [loading, setLoading] = useState(true)
     let navigate = useNavigate();
-
+    console.log("welcome user, userInfo\n", user)
     const port = '8000'
-    const baseURL = `http://192.168.0.8:${port}`
+    const baseURL = `http://localhost:${port}`
 
     let registerUser = async (e) => {
         let response = await fetch(`${baseURL}/accounts/register/`, {
@@ -61,16 +69,15 @@ export const AuthProvider = ({children}) => {
         if (response.status === 200) {
             // setAuthTokens value and store it in state and in local storage
             setAuthTokens(data)
-
             // decode access token that store user information
-            setUser(jwt_decode(data.access))
-
+            setUser(jwtDecode(data.access))
+            
             // Set localstorage user's access token, whenever user comes back e.g. next day, still can be logged in
             localStorage.setItem('authTokens', JSON.stringify(data))
             toast.success("Hey 👋 you are logged in!", {
-                position: toast.POSITION.TOP_RIGHT,
-                containerId: 'loggedIn',
-            })
+                position: "top-right",
+                autoClose: 3000,
+              });
         } else {
             toast.error(data['detail'], {
                 position: "top-center",
@@ -108,7 +115,7 @@ export const AuthProvider = ({children}) => {
     //     let data = await response.json()
     //     if (response.status === 200) {
     //         setAuthTokens(data)
-    //         setUser(jwt_decode(data.access))
+    //         setUser(jwtDecode(data.access))
     //         localStorage.setItem('authTokens', JSON.stringify(data))
     //     } else {
     //         toast.warning("Sorry you need to logged in again", {
@@ -129,8 +136,8 @@ export const AuthProvider = ({children}) => {
         setUser(null)
         localStorage.removeItem('authTokens')
         toast.warning("You are successfully logged out", {
-            position: toast.POSITION.TOP_RIGHT,
-            containerId: 'homePage',
+            position: "top-right",
+            autoClose: 3000,
         })
         navigate('/')
     }
@@ -167,7 +174,8 @@ export const AuthProvider = ({children}) => {
 
     return (
         <AuthContext.Provider value={contextData}>
-            {loading ? null : children}
+            {/* {loading ? null : children} */}
+            {children}
         </AuthContext.Provider>
     )
 }
