@@ -31,19 +31,19 @@ export const AuthProvider = ({children}) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                'first_name': e.first_name,
                 'email': e.email,
                 'password': e.password,
+                'user_name': e.username,
                 'password2': e.password2,
             })
         })
         await response.json()
         if (response.status === 201) {
             toast.success("Account has been created!", {
-                position: toast.POSITION.TOP_RIGHT,
+                position: "top-right",
             })
             toast.warning("Please Login to your account", {
-                position: toast.POSITION.TOP_RIGHT,
+                position: "top-right",
             })
             setTimeout(function () {
                 navigate('/Signin')
@@ -51,7 +51,7 @@ export const AuthProvider = ({children}) => {
 
         } else {
             toast.error('Something gone wrong', {
-                position: toast.POSITION.TOP_CENTER,
+                position: "top-center",
             })
         }
     }
