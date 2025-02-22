@@ -22,7 +22,8 @@ export const AuthProvider = ({children}) => {
     let navigate = useNavigate();
     console.log("welcome user, userInfo\n", user)
     const port = '8000'
-    const baseURL = `http://localhost:${port}`
+    // const baseURL = `http://localhost:${port}`
+    const baseURL = `http://127.0.0.1:${port}`
 
     let registerUser = async (e) => {
         let response = await fetch(`${baseURL}/accounts/register/`, {

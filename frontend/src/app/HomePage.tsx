@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import img from "../assets/medical-stethoscope-white.jpg";
 import "./homepage.css";
-import AuthContext from "../providers/authProvider";
+import AuthContext from "../providers/AuthProvider";
 // import { useNavigate } from "react-router";
 import { ToastContainer } from "react-toastify";
 

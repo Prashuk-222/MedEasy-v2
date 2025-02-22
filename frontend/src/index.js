@@ -5,7 +5,7 @@ import HomePage from "../src/app/HomePage.tsx";
 import SignIn from "./app/(auth)/SignIn.tsx";
 import SignUp from "./app/(auth)/SignUp.tsx";
 import reportWebVitals from "./reportWebVitals";
-import { AuthProvider } from "./providers/authProvider.js";
+import { AuthProvider } from "./providers/AuthProvider.js";
 import { BrowserRouter, Routes, Route } from "react-router";
 import axios from "axios";
 

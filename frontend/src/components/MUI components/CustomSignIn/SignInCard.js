@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 import ForgotPassword from "./ForgotPassword";
 import { GoogleIcon, FacebookIcon } from "./CustomIcons";
 import logo from "../../../assets/logo2.png";
-import AuthContext from "../../../providers/authProvider";
+import AuthContext from "../../../providers/AuthProvider";
 import { ToastContainer } from "react-toastify";
 
 const Card = styled(MuiCard)(({ theme }) => ({
