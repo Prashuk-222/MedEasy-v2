@@ -4,6 +4,7 @@ import "./index.css";
 import HomePage from "../src/app/HomePage.tsx";
 import SignIn from "./app/(auth)/SignIn.tsx";
 import SignUp from "./app/(auth)/SignUp.tsx";
+import AddPatiend from "./app/(tabs)/AddPatient.tsx";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./providers/AuthProvider.js";
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -20,6 +21,7 @@ root.render(
           <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/addPatient" element={<AddPatiend />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
