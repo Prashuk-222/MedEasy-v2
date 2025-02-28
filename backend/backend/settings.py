@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "corsheaders",
     'accounts',
+    'patient',
     'rest_framework',
     'rest_framework_simplejwt',
 ]
@@ -137,3 +138,7 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = 'accounts.ProfileUser'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+MEDIA_URL = '/media/'
+import os
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
