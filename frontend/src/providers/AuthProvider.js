@@ -20,7 +20,6 @@ export const AuthProvider = ({children}) => {
     let [user, setUser] = useState (() => authTokens ? jwtDecode(authTokens.access) : null)
     // let [loading, setLoading] = useState(true)
     let navigate = useNavigate();
-    console.log("welcome user, userInfo\n", user)
     const port = '8000'
     // const baseURL = `http://localhost:${port}`
     const baseURL = `http://127.0.0.1:${port}`

@@ -7,6 +7,7 @@ import SignUp from "./app/(auth)/SignUp.tsx";
 import AddPatiend from "./app/(tabs)/AddPatient.tsx";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./providers/AuthProvider.js";
+import { PatientProvider } from "./providers/PatientProvider.js";
 import { BrowserRouter, Routes, Route } from "react-router";
 import axios from "axios";
 
@@ -17,12 +18,14 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/addPatient" element={<AddPatiend />} />
-        </Routes>
+        <PatientProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/addPatient" element={<AddPatiend />} />
+          </Routes>
+        </PatientProvider>
       </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
