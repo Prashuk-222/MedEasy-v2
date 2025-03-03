@@ -11,7 +11,7 @@ export const PatientProvider = ({ children }) => {
       ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
-  let [loading, setLoading] = useState(true);
+  let [loading, setLoading] = useState(false);
   let [patientList, setPatientList] = useState([]);
   let navigate = useNavigate();
   const port = "8000";
@@ -20,29 +20,34 @@ export const PatientProvider = ({ children }) => {
   let registerPatient = async (e) => {
     setLoading(true);
     try {
+      let formData = new FormData();
+      formData.append("first_name", e.firstName);
+      formData.append("last_name", e.lastName);
+      formData.append("age", e.age);
+      formData.append("phone_number", e.phoneNo);
+      formData.append("email",  e.email);
+      if (e.photo) {
+        formData.append("profile_photo", e.photo);
+      }
+
       let response = await fetch(`${baseURL}/patients/`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${authTokens.access}`,
         },
-        body: JSON.stringify({
-          first_name: e.first_name,
-          last_name: e.last_name,
-          age: e.age,
-          phone_number: e.phone_number,
-          email: e.email || null,
-        }),
+        body: formData,
       });
-      await response.json();
+      console.log(formData)
+      let data = await response.json();
       if (response.status === 201) {
         toast.success("Patient is been registered!", {
           position: "top-right",
         });
         setTimeout(function () {
-          navigate("/");
+          // navigate("/");
         }, 6000);
       } else {
+        console.log(data);
         toast.error("Error while creating patient, try again after sometime", {
           position: "top-center",
         });
@@ -74,9 +79,10 @@ export const PatientProvider = ({ children }) => {
           position: "top-right",
         });
         setTimeout(function () {
-          // navigate("/");
-        }, 6000);
+          setLoading(false)
+        }, 2000);
       } else {
+        console.log(data);
         toast.error("Error while fetching patient list", {
           position: "top-center",
         });

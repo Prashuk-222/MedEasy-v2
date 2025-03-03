@@ -7,12 +7,7 @@ import { ToastContainer } from "react-toastify";
 
 export default function HomePage() {
   const {
-    // setUser,
-    // setAuthTokens,
-    // registerUser,
-    // loginUser,
     logoutUser,
-    // user,
     authTokens,
   } = useContext(AuthContext);
 
@@ -23,7 +18,7 @@ export default function HomePage() {
       backgroundImage: `url(${img})`,
     }}
     >
-    <ToastContainer />
+    <ToastContainer aria-label="Notification container" />
       {/* Header */}
       <div
         className="header flex justify-end gap-16 py-4 bg-transparent"

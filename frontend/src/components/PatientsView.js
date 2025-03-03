@@ -4,48 +4,13 @@ import { X, Search, Phone, Mail, User } from "lucide-react";
 import PatientDetailView from "./PatientDetailView";
 
 const PatientsView = ({ onClose }) => {
-  const { fetchPatients, loading } = useContext(PatientContext);
+  const { fetchPatients, patientList, loading, setLoading } = useContext(PatientContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const patientList = [
-    {
-      id: "3c6b0e0c-b4eb-4bc3-a836-8e72f3578443",
-      first_name: "Ayush",
-      last_name: "Singh",
-      age: 22,
-      email: null,
-      phone_number: "7817023241",
-      profile_photo: null,
-      registered_by: {
-        id: "661bc01a-2331-49ac-bcc5-14cb3abf9f2c",
-        user_name: "testuser",
-        email: "user@example.com",
-      },
-      created_at: "2025-03-02T17:06:15.243021Z",
-      updated_at: "2025-03-02T17:06:15.243021Z",
-    },
-    {
-      id: "bc84de79-4691-48e8-b7c6-c19e6665355b",
-      first_name: "Prashuk",
-      last_name: "Jain",
-      age: 23,
-      email: "tetsuser@gmail.com",
-      phone_number: "12345678",
-      profile_photo:
-        "https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww",
-      registered_by: {
-        id: "661bc01a-2331-49ac-bcc5-14cb3abf9f2c",
-        user_name: "testuser",
-        email: "user@example.com",
-      },
-      created_at: "2025-03-02T17:07:01.148101Z",
-      updated_at: "2025-03-02T17:07:01.148101Z",
-    },
-  ];
-
   useEffect(() => {
     fetchPatients();
+    setLoading(false);
   }, []);
 
   const filteredPatients = patientList.filter(
@@ -68,7 +33,6 @@ const PatientsView = ({ onClose }) => {
     setSelectedPatient(null);
   };
 
-  // If a patient is selected, show the details view
   if (selectedPatient) {
     return (
       <PatientDetailView

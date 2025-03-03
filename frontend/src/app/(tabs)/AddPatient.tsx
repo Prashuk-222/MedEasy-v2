@@ -1,21 +1,26 @@
 import React, { useState, useContext } from "react";
 import "./addPatient.css";
 import AuthContext from "../../providers/AuthProvider";
+import PatientContext from "../../providers/PatientProvider";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import PatientsView from "../../components/PatientsView";
-import { ToastContainer } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserProfileEdit = () => {
   const { user, authTokens } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { registerPatient, fetchPatients, patientList, loading, setLoading } =
+    useContext(PatientContext);
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
-    phoneNo: "123-456-7890",
-    photo:
-      "https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png",
+    email: null,
+    age: "",
+    phoneNo: "",
+    photo: null,
   });
 
   const handleChange = (e) => {
@@ -26,11 +31,7 @@ const UserProfileEdit = () => {
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, photo: reader.result });
-      };
-      reader.readAsDataURL(file);
+      setFormData({ ...formData, photo: file });
     }
   };
 
@@ -38,17 +39,31 @@ const UserProfileEdit = () => {
     setFormData({
       firstName: "",
       lastName: "",
-      email: "",
+      email: null,
+      age: "",
       phoneNo: "",
-      photo:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR81iX4Mo49Z3oCPSx-GtgiMAkdDop2uVmVvw&s",
+      photo: null,
     });
+  };
+
+  const handleRegisterPatient = async () => {
+    if (
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.age === "" ||
+      formData.phoneNo === ""
+    ) {
+      toast.error("Please fill all the required fields marked as *");
+      return;
+    }
+
+    await registerPatient(formData);
   };
 
   if (!user || !authTokens) {
     return (
       <div className="app-container">
-        <ToastContainer />
+        <ToastContainer aria-label="Notification container" />
         <div className="profile-container">
           <div className="header-section">
             <ArrowBackIosIcon
@@ -67,9 +82,41 @@ const UserProfileEdit = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="app-container">
+        <ToastContainer aria-label="Notification container" />
+        <div className="profile-container">
+          <div className="header-section">
+            <ArrowBackIosIcon
+              className="back-icon"
+              onClick={() => window.history.back()}
+            />
+            <h5 className="header-title">Add Patient Profile</h5>
+          </div>
+
+          {/* Loading Indicator */}
+          <div
+            className="loading-container"
+            style={{
+              height: "80vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            <CircularProgress size={50} />
+            <p className="loading-text">Loading, please wait...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
-      <ToastContainer />
+      <ToastContainer aria-label="Notification container" />
       <div className="profile-container">
         <div className="header-section">
           <ArrowBackIosIcon
@@ -83,7 +130,9 @@ const UserProfileEdit = () => {
           <div className="profile-header">
             <div className="profile-photo-container">
               <img
-                src={formData.photo || "/placeholder.svg"}
+                src={
+                  formData.photo ? URL.createObjectURL(formData.photo) : "https://static-00.iconduck.com/assets.00/user-icon-512x512-x23sj495.png"
+                }
                 alt="Profile"
                 className="profile-photo"
               />
@@ -113,7 +162,7 @@ const UserProfileEdit = () => {
                 className="secondary-button"
                 onClick={() => setIsModalOpen(true)}
               >
-                <span className="button-icon">👁️</span>View Profile
+                <span className="button-icon">📑</span>View Profile
               </button>
             </div>
           </div>
@@ -199,7 +248,12 @@ const UserProfileEdit = () => {
             </button>
             <div className="footer-actions">
               <button className="secondary-button">Cancel</button>
-              <button className="primary-button">Save Changes</button>
+              <button
+                className="primary-button"
+                onClick={handleRegisterPatient}
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
@@ -209,12 +263,6 @@ const UserProfileEdit = () => {
       {isModalOpen && (
         <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="close-button"
-              onClick={() => setIsModalOpen(false)}
-            >
-              ×
-            </button>
             <PatientsView onClose={() => setIsModalOpen(!isModalOpen)} />
           </div>
         </div>
