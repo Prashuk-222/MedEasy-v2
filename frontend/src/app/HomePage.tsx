@@ -1,18 +1,13 @@
 import React, { useContext } from "react";
 import img from "../assets/medical-stethoscope-white.jpg";
 import "./homepage.css";
-import AuthContext from "../providers/authProvider";
+import AuthContext from "../providers/AuthProvider";
 // import { useNavigate } from "react-router";
 import { ToastContainer } from "react-toastify";
 
 export default function HomePage() {
   const {
-    // setUser,
-    // setAuthTokens,
-    // registerUser,
-    // loginUser,
     logoutUser,
-    // user,
     authTokens,
   } = useContext(AuthContext);
 
@@ -23,7 +18,7 @@ export default function HomePage() {
       backgroundImage: `url(${img})`,
     }}
     >
-    <ToastContainer />
+    <ToastContainer aria-label="Notification container" />
       {/* Header */}
       <div
         className="header flex justify-end gap-16 py-4 bg-transparent"
@@ -63,7 +58,7 @@ export default function HomePage() {
 
           <div className="flex items-center justify-center flex-col w-full h-[50%] gap-2">
             <a
-              href="/"
+              href="/addPatient"
               className="text-xl bg-[#1c2932] px-12 py-4 text-white shadow-sm shadow-black font-semibold"
               style={{ borderRadius: 10 }}
             >

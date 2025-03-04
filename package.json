@@ -4,7 +4,7 @@
   "description": "MedEasy is an intelligent healthcare assistant that leverages AI to support medical professionals in patient diagnosis and examination processes. The system aims to enhance the efficiency and accuracy of medical consultations through advanced AI technologies.",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"cd backend && python manage.py runserver\" \"cd frontend && npm start\""
+    "dev": "concurrently \"cd backend && call env\\Scripts\\activate && python manage.py runserver\" \"cd frontend && npm start\""
   },
   "repository": {
     "type": "git",
