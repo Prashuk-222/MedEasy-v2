@@ -1,0 +1,7 @@
+frontend:
+    npm i
+    npm start
+
+backend:
+    env\Scripts\activate.bat
+    python manage.py runserver
