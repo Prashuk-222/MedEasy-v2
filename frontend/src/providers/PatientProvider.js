@@ -25,7 +25,9 @@ export const PatientProvider = ({ children }) => {
       formData.append("last_name", e.lastName);
       formData.append("age", e.age);
       formData.append("phone_number", e.phoneNo);
-      formData.append("email",  e.email);
+      if (e.email !== null && e.email !== undefined) {
+        formData.append("email", e.email);
+      }
       if (e.photo) {
         formData.append("profile_photo", e.photo);
       }
