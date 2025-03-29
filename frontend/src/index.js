@@ -5,6 +5,7 @@ import HomePage from "../src/app/HomePage.tsx";
 import SignIn from "./app/(auth)/SignIn.tsx";
 import SignUp from "./app/(auth)/SignUp.tsx";
 import AddPatiend from "./app/(tabs)/AddPatient.tsx";
+import ChatHomePage from "./app/(tabs)/ChatHomePage.tsx";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider } from "./providers/AuthProvider.js";
 import { PatientProvider } from "./providers/PatientProvider.js";
@@ -24,6 +25,7 @@ root.render(
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/addPatient" element={<AddPatiend />} />
+            <Route path="/chatHomePage" element={<ChatHomePage />} />
           </Routes>
         </PatientProvider>
       </AuthProvider>
