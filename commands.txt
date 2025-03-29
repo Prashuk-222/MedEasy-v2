@@ -1,7 +1,15 @@
 frontend:
+    //First time Command
     npm i
+
+    //normal command
     npm start
 
 backend:
-    env\Scripts\activate.bat
+    //For First time Commands
+    python -m venv env
+    pip install -r requirements.txt
+
+    //normal command
+    env\Scripts\activate
     python manage.py runserver
