@@ -64,7 +64,7 @@ export default function HomePage() {
             >
               New Patient
             </a>
-            <a href="/" className="text-lg">
+            <a href="/chathomepage" className="text-lg">
               Existing Patient?
             </a>
           </div>

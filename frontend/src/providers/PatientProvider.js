@@ -46,8 +46,8 @@ export const PatientProvider = ({ children }) => {
           position: "top-right",
         });
         setTimeout(function () {
-          // navigate("/");
-        }, 6000);
+          navigate("/chatHomePage", { replace: true });
+        }, 3000);
       } else {
         console.log(data);
         toast.error("Error while creating patient, try again after sometime", {
