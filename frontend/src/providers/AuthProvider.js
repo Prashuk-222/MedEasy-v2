@@ -18,10 +18,8 @@ export const AuthProvider = ({children}) => {
 
     let [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState (() => authTokens ? jwtDecode(authTokens.access) : null)
-    // let [loading, setLoading] = useState(true)
     let navigate = useNavigate();
     const port = '8000'
-    // const baseURL = `http://localhost:${port}`
     const baseURL = `http://127.0.0.1:${port}`
 
     let registerUser = async (e) => {

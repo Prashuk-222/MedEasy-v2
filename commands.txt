@@ -1,0 +1,19 @@
+frontend:
+    //First time Command
+    npm i
+
+    //normal command
+    npm start
+
+backend:
+    //For First time Commands
+    python -m venv env
+    env\Scripts\activate
+    pip install -r requirements.txt
+
+    //normal command
+    env\Scripts\activate
+    python manage.py runserver
+
+root folder:
+    npm run dev
