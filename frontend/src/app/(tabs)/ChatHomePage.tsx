@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   Mic,
+  MicOff,
   ChevronDown,
   ChevronUp,
   Send,
@@ -13,6 +14,9 @@ import {
   PenTool,
 } from "lucide-react";
 import PatientContext from "../../providers/PatientProvider";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const questions = [
   {
@@ -52,6 +56,50 @@ const ChatHome = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [activeRecordingQuestion, setActiveRecordingQuestion] = useState(null);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
+
+  const [lastTranscriptValue, setLastTranscriptValue] = useState("");
+
+  useEffect(() => {
+    if (activeRecordingQuestion && selectedPatient && transcript) {
+      if (transcript !== lastTranscriptValue) {
+        setAnswers((prev) => {
+          const currentAnswer =
+            prev[selectedPatient.id]?.[activeRecordingQuestion] || "";
+
+          const updatedAnswer =
+            currentAnswer === ""
+              ? transcript
+              : `${currentAnswer} ${transcript
+                  .slice(lastTranscriptValue.length)
+                  .trim()}`;
+
+          return {
+            ...prev,
+            [selectedPatient.id]: {
+              ...prev[selectedPatient.id],
+              [activeRecordingQuestion]: updatedAnswer,
+            },
+          };
+        });
+
+        setLastTranscriptValue(transcript);
+      }
+    }
+  }, [
+    transcript,
+    activeRecordingQuestion,
+    selectedPatient,
+    lastTranscriptValue,
+  ]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,6 +139,10 @@ const ChatHome = () => {
   };
 
   const toggleQuestion = (id) => {
+    // If switching questions and still recording, stop recording
+    if (listening && activeRecordingQuestion) {
+      handleStopListening();
+    }
     setExpandedQuestion((prev) => (prev === id ? null : id));
   };
 
@@ -108,8 +160,44 @@ const ChatHome = () => {
       answers[selectedPatient.id]?.[questionId] &&
       answers[selectedPatient.id][questionId].trim() !== ""
     ) {
+      if (listening && activeRecordingQuestion === questionId) {
+        handleStopListening();
+      }
       toggleQuestion(questionId);
     }
+  };
+
+  const handleStartListening = (questionId) => {
+    if (!browserSupportsSpeechRecognition) {
+      alert("Your browser doesn't support speech recognition.");
+      return;
+    }
+
+    if (!isMicrophoneAvailable) {
+      alert("Microphone permission is required for voice input.");
+      return;
+    }
+
+    // Stop any ongoing recording
+    if (listening) {
+      SpeechRecognition.stopListening();
+    }
+
+    // Clear transcript before starting
+    resetTranscript();
+    setLastTranscriptValue("");
+    setActiveRecordingQuestion(questionId);
+
+    // Start continuous listening
+    SpeechRecognition.startListening({ continuous: true });
+  };
+
+  const handleStopListening = () => {
+    SpeechRecognition.stopListening();
+    setActiveRecordingQuestion(null);
+    // Reset the transcript tracking
+    setLastTranscriptValue("");
+    resetTranscript();
   };
 
   const renderPatientStatus = (progress) => {
@@ -118,6 +206,10 @@ const ChatHome = () => {
     if (progress < 100) return { color: "bg-blue-500", label: "Almost Done" };
     return { color: "bg-green-500", label: "Completed" };
   };
+
+  if (!browserSupportsSpeechRecognition) {
+    console.warn("Browser doesn't support speech recognition.");
+  }
 
   return (
     <div className="h-screen flex bg-[#DBDEE3] overflow-hidden">
@@ -169,72 +261,75 @@ const ChatHome = () => {
                 </p>
               </div>
             ) : (
-              filteredPatients.slice().reverse().map((patient) => {
-                const progress = getProgress(patient.id);
-                const status = renderPatientStatus(progress);
-                return (
-                  <button
-                    key={patient.id}
-                    className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
-                      selectedPatient?.id === patient.id
-                        ? "bg-gray-700 text-white shadow-md"
-                        : "bg-white hover:bg-gray-50 border border-gray-200 shadow-sm"
-                    }`}
-                    onClick={() => setSelectedPatient(patient)}
-                  >
-                    <div className="relative">
-                      <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200">
-                        <img
-                          src={
-                            patient.profile_photo ||
-                            "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
-                          }
-                          alt={patient.first_name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      {progress === 100 && (
-                        <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 shadow-lg">
-                          <CheckCircle size={14} className="text-white" />
+              filteredPatients
+                .slice()
+                .reverse()
+                .map((patient) => {
+                  const progress = getProgress(patient.id);
+                  const status = renderPatientStatus(progress);
+                  return (
+                    <button
+                      key={patient.id}
+                      className={`flex items-center gap-3 w-full p-3 rounded-xl transition-all duration-200 ${
+                        selectedPatient?.id === patient.id
+                          ? "bg-gray-700 text-white shadow-md"
+                          : "bg-white hover:bg-gray-50 border border-gray-200 shadow-sm"
+                      }`}
+                      onClick={() => setSelectedPatient(patient)}
+                    >
+                      <div className="relative">
+                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-200">
+                          <img
+                            src={
+                              patient.profile_photo ||
+                              "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                            }
+                            alt={patient.first_name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                      )}
-                    </div>
-                    <div className="text-left flex-1 min-w-0">
-                      <p
-                        className={`font-semibold text-sm truncate ${
-                          selectedPatient?.id === patient.id
-                            ? "text-white"
-                            : "text-gray-800"
-                        }`}
-                      >
-                        {patient.first_name} {patient.last_name}
-                      </p>
-                      <p
-                        className={`text-xs truncate ${
-                          selectedPatient?.id === patient.id
-                            ? "text-gray-300"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        {patient.email ||
-                          patient.phone_number ||
-                          "No contact info"}
-                      </p>
-                    </div>
-                    <div>
-                      <div
-                        className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          selectedPatient?.id === patient.id
-                            ? "bg-white bg-opacity-20 text-white"
-                            : `${status.color} text-white`
-                        }`}
-                      >
-                        {status.label}
+                        {progress === 100 && (
+                          <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 shadow-lg">
+                            <CheckCircle size={14} className="text-white" />
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </button>
-                );
-              })
+                      <div className="text-left flex-1 min-w-0">
+                        <p
+                          className={`font-semibold text-sm truncate ${
+                            selectedPatient?.id === patient.id
+                              ? "text-white"
+                              : "text-gray-800"
+                          }`}
+                        >
+                          {patient.first_name} {patient.last_name}
+                        </p>
+                        <p
+                          className={`text-xs truncate ${
+                            selectedPatient?.id === patient.id
+                              ? "text-gray-300"
+                              : "text-gray-500"
+                          }`}
+                        >
+                          {patient.email ||
+                            patient.phone_number ||
+                            "No contact info"}
+                        </p>
+                      </div>
+                      <div>
+                        <div
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${
+                            selectedPatient?.id === patient.id
+                              ? "bg-white bg-opacity-20 text-white"
+                              : `${status.color} text-white`
+                          }`}
+                        >
+                          {status.label}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })
             )}
           </div>
         </div>
@@ -314,6 +409,8 @@ const ChatHome = () => {
               {questions.map((q, index) => {
                 const isAnswered = answers[selectedPatient.id]?.[q.id];
                 const isExpanded = expandedQuestion === q.id;
+                const isRecording =
+                  listening && activeRecordingQuestion === q.id;
 
                 return (
                   <div
@@ -373,7 +470,11 @@ const ChatHome = () => {
                       >
                         <div className="flex gap-3">
                           <textarea
-                            className="flex-1 border border-gray-300 p-4 rounded-lg shadow-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 h-48 bg-white resize-none"
+                            className={`flex-1 border ${
+                              isRecording
+                                ? "border-blue-400 ring-2 ring-blue-200"
+                                : "border-gray-300"
+                            } p-4 rounded-lg shadow-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 h-48 bg-white resize-none`}
                             placeholder="Type your detailed answer here..."
                             value={answers[selectedPatient.id]?.[q.id] || ""}
                             onChange={(e) =>
@@ -387,12 +488,40 @@ const ChatHome = () => {
                         </div>
                         <div className="flex justify-between items-center mt-4">
                           <div className="flex items-center gap-2">
-                            <button className="bg-gray-100 p-3 rounded-full text-gray-600 hover:bg-gray-200 transition-colors">
-                              <Mic size={20} />
+                            <button
+                              className={`p-3 rounded-full ${
+                                isRecording
+                                  ? "bg-red-100 text-red-600 hover:bg-red-200 animate-pulse"
+                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                              } 
+                              transition-colors`}
+                              onClick={() =>
+                                isRecording
+                                  ? handleStopListening()
+                                  : handleStartListening(q.id)
+                              }
+                              title={
+                                isRecording
+                                  ? "Stop recording"
+                                  : "Start voice input"
+                              }
+                            >
+                              {isRecording ? (
+                                <MicOff size={20} />
+                              ) : (
+                                <Mic size={20} />
+                              )}
                             </button>
                             <span className="text-gray-500 text-sm font-medium">
-                              Voice input
+                              {isRecording
+                                ? "Recording... Click to stop"
+                                : "Voice input"}
                             </span>
+                            {isRecording && (
+                              <span className="text-blue-500 text-xs ml-2">
+                                Speaking: {transcript || "..."}
+                              </span>
+                            )}
                           </div>
                           <button
                             className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all shadow-sm ${
