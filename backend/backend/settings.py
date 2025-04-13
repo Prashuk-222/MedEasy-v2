@@ -29,6 +29,23 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
+from dotenv import load_dotenv
+import os
+
+# Construct path to the .env file manually
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
+ENV_PATH = BASE_DIR.parent / "env" / ".env"
+
+load_dotenv(dotenv_path=ENV_PATH)
+
+# Now you can access the key
+Google_Api_key = os.getenv("GOOGLE_API_KEY")
+
+if not Google_Api_key:
+    raise ValueError("Google API Key not found.")
 
 # Application definition
 
@@ -42,6 +59,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'accounts',
     'patient',
+    'chatbot',
     'rest_framework',
     'rest_framework_simplejwt',
 ]
