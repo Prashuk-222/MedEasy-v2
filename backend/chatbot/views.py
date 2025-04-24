@@ -5,6 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .bot import process_input
 from .models import ChatMessage, Patient
 from rest_framework.exceptions import APIException
+from django.shortcuts import get_object_or_404
 
 class ChatbotView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -12,12 +13,13 @@ class ChatbotView(APIView):
 
     def post(self, request):
         user_input = request.data.get('message', '')
+        patient_id = request.data.get('patient_id')
         if not user_input:
             return Response({'error': 'Message is required'}, status=400)
 
         try:
             # Get the Patient instance linked to the logged-in user
-            patient = Patient.objects.get(registered_by=request.user)  
+            patient = get_object_or_404(Patient, id=patient_id, registered_by=request.user) 
 
             # Process input and save message
             response = process_input(user_input)
